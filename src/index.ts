@@ -103,9 +103,10 @@ app.get('/', (c) => {
                     <textarea 
                         id="generatedUrl" 
                         readonly 
-                        rows="3"
-                        class="w-full px-4 py-2 bg-gray-700 rounded-lg resize-none text-gray-400 focus:outline-none"
-                        placeholder="Enter RSS feed URL and cron expression above, then click Generate"
+                        rows="1"
+                        class="w-full px-4 py-2 bg-gray-700 rounded-lg resize-none text-gray-400 focus:outline-none overflow-hidden"
+                        placeholder="Enter RSS feed URL and cron expression above"
+                        style="min-height: 2.5rem;"
                     ></textarea>
                     <button 
                         id="copyBtn"
@@ -175,6 +176,11 @@ app.get('/', (c) => {
             }
         }
 
+        function adjustTextareaHeight() {
+            generatedUrl.style.height = 'auto';
+            generatedUrl.style.height = generatedUrl.scrollHeight + 'px';
+        }
+
         function updateUrl() {
             const urlValue = urlInput.value.trim();
             const cronValue = cronInput.value.trim();
@@ -189,11 +195,13 @@ app.get('/', (c) => {
                 generatedUrl.classList.remove('text-gray-400');
                 generatedUrl.classList.add('text-white');
                 copyBtn.disabled = false;
+                adjustTextareaHeight();
             } else {
                 generatedUrl.value = '';
                 generatedUrl.classList.add('text-gray-400');
                 generatedUrl.classList.remove('text-white');
                 copyBtn.disabled = true;
+                adjustTextareaHeight();
             }
         }
 
@@ -227,6 +235,9 @@ app.get('/', (c) => {
 
         // Initial update
         updateUrl();
+        
+        // Adjust height on window resize
+        window.addEventListener('resize', adjustTextareaHeight);
     </script>
 </body>
 </html>`

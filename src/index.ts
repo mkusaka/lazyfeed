@@ -62,7 +62,7 @@ app.get('/', (c) => {
                 Try it out
             </h2>
             
-            <div class="space-y-4">
+            <form id="feedForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium mb-2">RSS Feed URL</label>
                     <input 
@@ -95,7 +95,14 @@ app.get('/', (c) => {
                         </select>
                     </div>
                 </div>
-            </div>
+                
+                <button 
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    Generate LazyFeed URL
+                </button>
+            </form>
             
             <div id="result" class="mt-6">
                 <label class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
@@ -158,6 +165,7 @@ app.get('/', (c) => {
     </div>
 
     <script>
+        const form = document.getElementById('feedForm');
         const urlInput = document.getElementById('url');
         const cronInput = document.getElementById('cron');
         const cronPreset = document.getElementById('cronPreset');
@@ -232,6 +240,13 @@ app.get('/', (c) => {
             if (e.target.value) {
                 cronInput.value = e.target.value;
                 updateUrl();
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!copyBtn.disabled) {
+                copyBtn.click();
             }
         });
 

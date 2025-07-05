@@ -104,20 +104,23 @@ app.get('/', (c) => {
                 </button>
             </form>
             
-            <div id="result" class="mt-6 hidden">
+            <div id="result" class="mt-6">
                 <label class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
-                <div class="flex gap-2">
-                    <input 
-                        type="text" 
+                <div class="flex flex-col gap-2">
+                    <textarea 
                         id="generatedUrl" 
                         readonly 
-                        class="flex-1 px-4 py-2 bg-gray-700 rounded-lg"
-                    >
+                        rows="3"
+                        class="w-full px-4 py-2 bg-gray-700 rounded-lg resize-none text-gray-400 focus:outline-none"
+                        placeholder="Enter RSS feed URL and cron expression above, then click Generate"
+                    ></textarea>
                     <button 
                         id="copyBtn"
-                        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition"
+                        class="self-end px-6 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        disabled
                     >
                         <i class="fas fa-copy"></i>
+                        <span>Copy URL</span>
                     </button>
                 </div>
             </div>
@@ -167,35 +170,70 @@ app.get('/', (c) => {
         const urlInput = document.getElementById('url');
         const cronInput = document.getElementById('cron');
         const cronPreset = document.getElementById('cronPreset');
-        const result = document.getElementById('result');
         const generatedUrl = document.getElementById('generatedUrl');
         const copyBtn = document.getElementById('copyBtn');
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function updateUrl() {
+            const urlValue = urlInput.value.trim();
+            const cronValue = cronInput.value.trim();
+            
+            if (urlValue && cronValue && isValidUrl(urlValue)) {
+                const baseUrl = window.location.origin + '/lazyfeed';
+                const url = encodeURIComponent(urlValue);
+                const cron = encodeURIComponent(cronValue);
+                const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
+                
+                generatedUrl.value = fullUrl;
+                generatedUrl.classList.remove('text-gray-400');
+                generatedUrl.classList.add('text-white');
+                copyBtn.disabled = false;
+            } else {
+                generatedUrl.value = '';
+                generatedUrl.classList.add('text-gray-400');
+                generatedUrl.classList.remove('text-white');
+                copyBtn.disabled = true;
+            }
+        }
+
+        // Update on input changes
+        urlInput.addEventListener('input', updateUrl);
+        cronInput.addEventListener('input', updateUrl);
 
         cronPreset.addEventListener('change', (e) => {
             if (e.target.value) {
                 cronInput.value = e.target.value;
+                updateUrl();
             }
         });
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const baseUrl = window.location.origin + '/lazyfeed';
-            const url = encodeURIComponent(urlInput.value);
-            const cron = encodeURIComponent(cronInput.value);
-            const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
-            
-            generatedUrl.value = fullUrl;
-            result.classList.remove('hidden');
+            if (!copyBtn.disabled) {
+                copyBtn.click();
+            }
         });
 
         copyBtn.addEventListener('click', () => {
             generatedUrl.select();
             document.execCommand('copy');
-            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
             setTimeout(() => {
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                copyBtn.innerHTML = originalHTML;
             }, 2000);
         });
+
+        // Initial update
+        updateUrl();
     </script>
 </body>
 </html>`

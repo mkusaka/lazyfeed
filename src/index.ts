@@ -160,12 +160,12 @@ app.get('/', (c) => {
     </div>
 
     <script>
-        const form = document.getElementById('feedForm');
-        const urlInput = document.getElementById('url');
-        const cronInput = document.getElementById('cron');
-        const cronPreset = document.getElementById('cronPreset');
-        const generatedUrl = document.getElementById('generatedUrl');
-        const copyBtn = document.getElementById('copyBtn');
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlInput = document.getElementById('url');
+            const cronInput = document.getElementById('cron');
+            const cronPreset = document.getElementById('cronPreset');
+            const generatedUrl = document.getElementById('generatedUrl');
+            const copyBtn = document.getElementById('copyBtn');
 
         function isValidUrl(string) {
             try {
@@ -233,11 +233,12 @@ app.get('/', (c) => {
             }, 2000);
         });
 
-        // Initial update
-        updateUrl();
-        
-        // Adjust height on window resize
-        window.addEventListener('resize', adjustTextareaHeight);
+            // Initial update
+            updateUrl();
+            
+            // Adjust height on window resize
+            window.addEventListener('resize', adjustTextareaHeight);
+        });
     </script>
 </body>
 </html>`

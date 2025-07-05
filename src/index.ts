@@ -167,71 +167,64 @@ app.get('/', (c) => {
             const generatedUrl = document.getElementById('generatedUrl');
             const copyBtn = document.getElementById('copyBtn');
 
-        function isValidUrl(string) {
-            try {
-                new URL(string);
-                return true;
-            } catch (_) {
-                return false;
+            function isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
             }
-        }
 
-        function adjustTextareaHeight() {
-            generatedUrl.style.height = 'auto';
-            generatedUrl.style.height = generatedUrl.scrollHeight + 'px';
-        }
+            function adjustTextareaHeight() {
+                generatedUrl.style.height = 'auto';
+                generatedUrl.style.height = generatedUrl.scrollHeight + 'px';
+            }
 
-        function updateUrl() {
-            const urlValue = urlInput.value.trim();
-            const cronValue = cronInput.value.trim();
-            
-            if (urlValue && cronValue && isValidUrl(urlValue)) {
-                const baseUrl = window.location.origin + '/lazyfeed';
-                const url = encodeURIComponent(urlValue);
-                const cron = encodeURIComponent(cronValue);
-                const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
+            function updateUrl() {
+                const urlValue = urlInput.value.trim();
+                const cronValue = cronInput.value.trim();
                 
-                generatedUrl.value = fullUrl;
-                generatedUrl.classList.remove('text-gray-400');
-                generatedUrl.classList.add('text-white');
-                copyBtn.disabled = false;
-                adjustTextareaHeight();
-            } else {
-                generatedUrl.value = '';
-                generatedUrl.classList.add('text-gray-400');
-                generatedUrl.classList.remove('text-white');
-                copyBtn.disabled = true;
-                adjustTextareaHeight();
+                if (urlValue && cronValue && isValidUrl(urlValue)) {
+                    const baseUrl = window.location.origin + '/lazyfeed';
+                    const url = encodeURIComponent(urlValue);
+                    const cron = encodeURIComponent(cronValue);
+                    const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
+                    
+                    generatedUrl.value = fullUrl;
+                    generatedUrl.classList.remove('text-gray-400');
+                    generatedUrl.classList.add('text-white');
+                    copyBtn.disabled = false;
+                    adjustTextareaHeight();
+                } else {
+                    generatedUrl.value = '';
+                    generatedUrl.classList.add('text-gray-400');
+                    generatedUrl.classList.remove('text-white');
+                    copyBtn.disabled = true;
+                    adjustTextareaHeight();
+                }
             }
-        }
 
-        // Update on input changes
-        urlInput.addEventListener('input', updateUrl);
-        cronInput.addEventListener('input', updateUrl);
+            // Update on input changes
+            urlInput.addEventListener('input', updateUrl);
+            cronInput.addEventListener('input', updateUrl);
 
-        cronPreset.addEventListener('change', (e) => {
-            if (e.target.value) {
-                cronInput.value = e.target.value;
-                updateUrl();
-            }
-        });
+            cronPreset.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    cronInput.value = e.target.value;
+                    updateUrl();
+                }
+            });
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!copyBtn.disabled) {
-                copyBtn.click();
-            }
-        });
-
-        copyBtn.addEventListener('click', () => {
-            generatedUrl.select();
-            document.execCommand('copy');
-            const originalHTML = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
-            setTimeout(() => {
-                copyBtn.innerHTML = originalHTML;
-            }, 2000);
-        });
+            copyBtn.addEventListener('click', () => {
+                generatedUrl.select();
+                document.execCommand('copy');
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i><span>Copied!</span>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                }, 2000);
+            });
 
             // Initial update
             updateUrl();

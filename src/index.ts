@@ -11,4 +11,172 @@ app.get('/lazyfeed', async (c) => {
   return handleLazyFeedRequest(c.req.raw, c.env.LAZYFEED_KV)
 })
 
+app.get('/', (c) => {
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LazyFeed - Smart RSS Caching Service</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                LazyFeed
+            </h1>
+            <p class="text-xl text-gray-300">Smart RSS feed caching based on cron schedules</p>
+        </header>
+
+        <!-- Try it section -->
+        <section class="bg-gray-800 rounded-lg shadow-xl p-8 mb-12">
+            <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                <i class="fas fa-rocket mr-3 text-blue-400"></i>
+                Try it out
+            </h2>
+            
+            <form id="feedForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">RSS Feed URL</label>
+                    <input 
+                        type="url" 
+                        id="url" 
+                        placeholder="https://www.nasa.gov/news-release/feed/"
+                        class="w-full px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                        value="https://www.nasa.gov/news-release/feed/"
+                    >
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Cron Expression</label>
+                    <div class="flex gap-2">
+                        <input 
+                            type="text" 
+                            id="cron" 
+                            placeholder="0 * * * *"
+                            class="flex-1 px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                            value="0 * * * *"
+                        >
+                        <select id="cronPreset" class="px-4 py-2 bg-gray-700 rounded-lg">
+                            <option value="">Custom</option>
+                            <option value="0 * * * *">Every hour</option>
+                            <option value="0 */6 * * *">Every 6 hours</option>
+                            <option value="0 0 * * *">Daily at midnight</option>
+                            <option value="0 10 * * *">Daily at 10 AM</option>
+                            <option value="0 22 * * *">Daily at 10 PM</option>
+                            <option value="0 10,22 * * *">Twice daily (10 AM & 10 PM)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button 
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200"
+                >
+                    Generate LazyFeed URL
+                </button>
+            </form>
+            
+            <div id="result" class="mt-6 hidden">
+                <label class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
+                <div class="flex gap-2">
+                    <input 
+                        type="text" 
+                        id="generatedUrl" 
+                        readonly 
+                        class="flex-1 px-4 py-2 bg-gray-700 rounded-lg"
+                    >
+                    <button 
+                        id="copyBtn"
+                        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition"
+                    >
+                        <i class="fas fa-copy"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="grid md:grid-cols-2 gap-6 mb-12">
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <i class="fas fa-clock text-3xl text-green-400 mb-3"></i>
+                <h3 class="text-xl font-semibold mb-2">Cron-based Updates</h3>
+                <p class="text-gray-300">Schedule RSS updates using standard cron expressions</p>
+            </div>
+            
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <i class="fas fa-bolt text-3xl text-yellow-400 mb-3"></i>
+                <h3 class="text-xl font-semibold mb-2">Lightning Fast</h3>
+                <p class="text-gray-300">Serve cached content instantly when fresh</p>
+            </div>
+            
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <i class="fas fa-shield-alt text-3xl text-blue-400 mb-3"></i>
+                <h3 class="text-xl font-semibold mb-2">Reliable Fallback</h3>
+                <p class="text-gray-300">Returns cached content if fetch fails</p>
+            </div>
+            
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <i class="fas fa-globe text-3xl text-purple-400 mb-3"></i>
+                <h3 class="text-xl font-semibold mb-2">Edge Powered</h3>
+                <p class="text-gray-300">Runs on Cloudflare Workers globally</p>
+            </div>
+        </section>
+
+        <!-- API docs link -->
+        <footer class="text-center">
+            <a 
+                href="https://github.com/mkusaka/lazyfeed"
+                class="inline-flex items-center text-blue-400 hover:text-blue-300 transition"
+            >
+                <i class="fab fa-github text-2xl mr-2"></i>
+                View on GitHub
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        const form = document.getElementById('feedForm');
+        const urlInput = document.getElementById('url');
+        const cronInput = document.getElementById('cron');
+        const cronPreset = document.getElementById('cronPreset');
+        const result = document.getElementById('result');
+        const generatedUrl = document.getElementById('generatedUrl');
+        const copyBtn = document.getElementById('copyBtn');
+
+        cronPreset.addEventListener('change', (e) => {
+            if (e.target.value) {
+                cronInput.value = e.target.value;
+            }
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const baseUrl = window.location.origin + '/lazyfeed';
+            const url = encodeURIComponent(urlInput.value);
+            const cron = encodeURIComponent(cronInput.value);
+            const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
+            
+            generatedUrl.value = fullUrl;
+            result.classList.remove('hidden');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            generatedUrl.select();
+            document.execCommand('copy');
+            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>`
+  
+  return c.html(html)
+})
+
 export default app

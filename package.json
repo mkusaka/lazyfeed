@@ -3,13 +3,24 @@
 	"scripts": {
 		"dev": "wrangler dev",
 		"deploy": "wrangler deploy --minify",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
+		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest",
+		"test:ui": "vitest --ui",
+		"lint": "tsc --noEmit"
 	},
 	"dependencies": {
 		"cron-parser": "^5.3.0",
 		"hono": "^4.8.4"
 	},
 	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250705.0",
+		"@types/node": "^24.0.10",
+		"@vitest/ui": "^3.2.4",
+		"miniflare": "^4.20250617.5",
+		"typescript": "^5.8.3",
+		"vitest": "^3.2.4",
+		"vitest-environment-miniflare": "^2.14.4",
 		"wrangler": "^4.23.0"
 	}
 }

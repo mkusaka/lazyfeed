@@ -26,14 +26,12 @@ app.get('/', (c) => {
     <meta property="og:url" content="https://lazyfeed.polyfill.workers.dev/">
     <meta property="og:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="og:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
-    <meta property="og:image" content="https://lazyfeed.polyfill.workers.dev/og-image.png">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:card" content="summary">
     <meta property="twitter:url" content="https://lazyfeed.polyfill.workers.dev/">
     <meta property="twitter:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="twitter:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
-    <meta property="twitter:image" content="https://lazyfeed.polyfill.workers.dev/og-image.png">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">

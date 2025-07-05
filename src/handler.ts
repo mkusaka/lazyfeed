@@ -17,7 +17,7 @@ export async function handleLazyFeedRequest(
     return new Response('url and cron are required', { status: 400 })
   }
 
-  // Cron 式の妥当性チェック
+  // Validate cron expression
   try {
     cronParser.parse(cron, { tz: 'UTC' })
   } catch {
@@ -28,7 +28,7 @@ export async function handleLazyFeedRequest(
   const encodedCron = encodeURIComponent(cron)
   const key = `meta:${encodedUrl}:${encodedCron}`
 
-  // KV から履歴とキャッシュを取得
+  // Get history and cache from KV
   const stored = await kv.get<KVData>(key, 'json') || {}
 
   const now = new Date()
@@ -37,7 +37,7 @@ export async function handleLazyFeedRequest(
   if (!stored.lastFetched) {
     shouldFetch = true
   } else {
-    // 次の実行時刻を計算
+    // Calculate next execution time
     const next = cronParser.parse(cron, {
       currentDate: new Date(stored.lastFetched),
       tz: 'UTC'
@@ -57,7 +57,7 @@ export async function handleLazyFeedRequest(
       
       const xml = await res.text()
       
-      // KV に保存
+      // Save to KV
       await kv.put(key, JSON.stringify({
         lastFetched: now.toISOString(),
         cache: xml
@@ -68,25 +68,25 @@ export async function handleLazyFeedRequest(
         headers: { 'Content-Type': 'application/xml' }
       })
     } catch {
-      // フェッチエラー時はキャッシュをフォールバック
+      // Fallback to cache on fetch error
       if (stored.cache) {
         return new Response(stored.cache, { 
           status: 200,
           headers: { 'Content-Type': 'application/xml' }
         })
       }
-      // 初回フェッチ失敗でキャッシュなしの場合
+      // First fetch failed with no cache
       return new Response('failed to fetch RSS', { status: 502 })
     }
   } else {
-    // キャッシュ返却
+    // Return cache
     if (stored.cache) {
       return new Response(stored.cache, { 
         status: 200,
         headers: { 'Content-Type': 'application/xml' }
       })
     }
-    // 理論上ここには到達しないはず
+    // Should not reach here in theory
     return new Response('no cache available', { status: 404 })
   }
 }

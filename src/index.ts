@@ -64,7 +64,7 @@ app.get('/', (c) => {
             
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium mb-2">RSS Feed URL</label>
+                    <label for="url" class="block text-sm font-medium mb-2">RSS Feed URL</label>
                     <input 
                         type="url" 
                         id="url" 
@@ -75,7 +75,7 @@ app.get('/', (c) => {
                 </div>
                 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Cron Expression</label>
+                    <label for="cron" class="block text-sm font-medium mb-2">Cron Expression</label>
                     <div class="flex flex-col sm:flex-row gap-2">
                         <input 
                             type="text" 
@@ -98,7 +98,7 @@ app.get('/', (c) => {
             </div>
             
             <div id="result" class="mt-6">
-                <label class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
+                <label for="generatedUrl" class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
                 <div class="flex flex-col gap-2">
                     <textarea 
                         id="generatedUrl" 

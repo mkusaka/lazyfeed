@@ -104,22 +104,24 @@ app.get('/', (c) => {
                 </button>
             </form>
             
-            <div id="result" class="mt-6 hidden">
+            <div id="result" class="mt-6">
                 <label class="block text-sm font-medium mb-2">Your LazyFeed URL:</label>
                 <div class="flex gap-2">
                     <input 
                         type="text" 
                         id="generatedUrl" 
                         readonly 
-                        class="flex-1 px-4 py-2 bg-gray-700 rounded-lg"
+                        class="flex-1 px-4 py-2 bg-gray-700 rounded-lg text-gray-400"
                     >
                     <button 
                         id="copyBtn"
-                        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition"
+                        class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled
                     >
                         <i class="fas fa-copy"></i>
                     </button>
                 </div>
+                <p id="urlError" class="text-red-400 text-sm mt-2 hidden">Please enter a valid URL and cron expression</p>
             </div>
         </section>
 
@@ -167,34 +169,96 @@ app.get('/', (c) => {
         const urlInput = document.getElementById('url');
         const cronInput = document.getElementById('cron');
         const cronPreset = document.getElementById('cronPreset');
-        const result = document.getElementById('result');
         const generatedUrl = document.getElementById('generatedUrl');
         const copyBtn = document.getElementById('copyBtn');
+        const urlError = document.getElementById('urlError');
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function isValidCron(cron) {
+            // Basic cron validation - 5 parts separated by spaces
+            const parts = cron.trim().split(/\\s+/);
+            return parts.length === 5;
+        }
+
+        function updateUrl() {
+            const urlValue = urlInput.value.trim();
+            const cronValue = cronInput.value.trim();
+            
+            if (urlValue && cronValue && isValidUrl(urlValue) && isValidCron(cronValue)) {
+                const baseUrl = window.location.origin + '/lazyfeed';
+                const url = encodeURIComponent(urlValue);
+                const cron = encodeURIComponent(cronValue);
+                const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
+                
+                generatedUrl.value = fullUrl;
+                generatedUrl.classList.remove('text-gray-400');
+                generatedUrl.classList.add('text-white');
+                copyBtn.disabled = false;
+                urlError.classList.add('hidden');
+            } else {
+                generatedUrl.value = 'Enter a valid URL and cron expression above';
+                generatedUrl.classList.add('text-gray-400');
+                generatedUrl.classList.remove('text-white');
+                copyBtn.disabled = true;
+                
+                if (urlValue || cronValue) {
+                    if (!urlValue) {
+                        urlError.textContent = 'Please enter a URL';
+                        urlError.classList.remove('hidden');
+                    } else if (!isValidUrl(urlValue)) {
+                        urlError.textContent = 'Please enter a valid URL';
+                        urlError.classList.remove('hidden');
+                    } else if (!cronValue) {
+                        urlError.textContent = 'Please enter a cron expression';
+                        urlError.classList.remove('hidden');
+                    } else if (!isValidCron(cronValue)) {
+                        urlError.textContent = 'Invalid cron expression format';
+                        urlError.classList.remove('hidden');
+                    }
+                } else {
+                    urlError.classList.add('hidden');
+                }
+            }
+        }
+
+        // Initial update
+        updateUrl();
+
+        // Update on input changes
+        urlInput.addEventListener('input', updateUrl);
+        cronInput.addEventListener('input', updateUrl);
 
         cronPreset.addEventListener('change', (e) => {
             if (e.target.value) {
                 cronInput.value = e.target.value;
+                updateUrl();
             }
         });
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const baseUrl = window.location.origin + '/lazyfeed';
-            const url = encodeURIComponent(urlInput.value);
-            const cron = encodeURIComponent(cronInput.value);
-            const fullUrl = baseUrl + '?url=' + url + '&cron=' + cron;
-            
-            generatedUrl.value = fullUrl;
-            result.classList.remove('hidden');
+            if (!copyBtn.disabled) {
+                copyBtn.click();
+            }
         });
 
         copyBtn.addEventListener('click', () => {
-            generatedUrl.select();
-            document.execCommand('copy');
-            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-            setTimeout(() => {
-                copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
-            }, 2000);
+            if (!copyBtn.disabled) {
+                generatedUrl.select();
+                document.execCommand('copy');
+                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            }
         });
     </script>
 </body>

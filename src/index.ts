@@ -12,6 +12,9 @@ app.get('/lazyfeed', async (c) => {
 })
 
 app.get('/', (c) => {
+  const url = new URL(c.req.url)
+  const baseUrl = `${url.protocol}//${url.host}`
+  
   const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,13 +26,13 @@ app.get('/', (c) => {
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://lazyfeed.polyfill.workers.dev/">
+    <meta property="og:url" content="${baseUrl}/">
     <meta property="og:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="og:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:url" content="https://lazyfeed.polyfill.workers.dev/">
+    <meta property="twitter:url" content="${baseUrl}/">
     <meta property="twitter:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="twitter:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
 

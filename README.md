@@ -98,7 +98,15 @@ pnpm run typecheck
 ### 1. Create KV Namespace
 
 ```bash
-pnpm wrangler kv:namespace create LAZYFEED_KV
+pnpm wrangler kv namespace create LAZYFEED_KV
+```
+
+This will output something like:
+```
+🌀 Creating namespace with title "lazyfeed-LAZYFEED_KV"
+✨ Success!
+Add the following to your configuration file in your kv_namespaces array:
+{ binding = "LAZYFEED_KV", id = "your-actual-namespace-id" }
 ```
 
 ### 2. Update wrangler.jsonc
@@ -110,10 +118,15 @@ Add the namespace ID from the previous command to `wrangler.jsonc`:
   "kv_namespaces": [
     {
       "binding": "LAZYFEED_KV",
-      "id": "your-namespace-id-here"
+      "id": "your-actual-namespace-id"
     }
   ]
 }
+```
+
+**Note**: To avoid committing production IDs, you can create a `wrangler.production.jsonc` file (add to `.gitignore`) and deploy with:
+```bash
+pnpm wrangler deploy --config wrangler.production.jsonc
 ```
 
 ### 3. Deploy

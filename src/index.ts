@@ -29,15 +29,18 @@ app.get('/', (c) => {
     <meta property="og:url" content="${baseUrl}/">
     <meta property="og:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="og:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
+    <meta property="og:image" content="${baseUrl}/og-image.png">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary">
+    <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="${baseUrl}/">
     <meta property="twitter:title" content="LazyFeed - Smart RSS Caching Service">
     <meta property="twitter:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
+    <meta property="twitter:image" content="${baseUrl}/og-image.png">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/svg+xml" href="${baseUrl}/favicon.ico">
+    <link rel="apple-touch-icon" href="${baseUrl}/logo.svg">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -198,6 +201,87 @@ app.get('/', (c) => {
 </html>`
   
   return c.html(html)
+})
+
+// SVG Logo for LazyFeed (RSS icon with clock)
+const svgLogo = `<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="#1F2937"/>
+  <g transform="translate(256, 256)">
+    <!-- RSS Icon -->
+    <circle cx="-120" cy="120" r="30" fill="url(#grad)"/>
+    <path d="M-120 -30 Q-120 90, 0 90 L0 30 Q-60 30, -60 -30 Z" fill="none" stroke="url(#grad)" stroke-width="40"/>
+    <path d="M-120 -120 Q-120 180, 90 180 L90 120 Q30 120, 30 -120 Z" fill="none" stroke="url(#grad)" stroke-width="40"/>
+    <!-- Clock overlay -->
+    <circle cx="80" cy="-80" r="100" fill="none" stroke="url(#grad)" stroke-width="15"/>
+    <line x1="80" y1="-80" x2="80" y2="-120" stroke="url(#grad)" stroke-width="10" stroke-linecap="round"/>
+    <line x1="80" y1="-80" x2="110" y2="-50" stroke="url(#grad)" stroke-width="10" stroke-linecap="round"/>
+  </g>
+</svg>`
+
+// Favicon endpoint
+app.get('/favicon.ico', (c) => {
+  c.header('Content-Type', 'image/svg+xml')
+  c.header('Cache-Control', 'public, max-age=86400')
+  return c.body(svgLogo)
+})
+
+app.get('/logo.svg', (c) => {
+  c.header('Content-Type', 'image/svg+xml')
+  c.header('Cache-Control', 'public, max-age=86400')
+  return c.body(svgLogo)
+})
+
+// OG Image endpoint
+app.get('/og-image.png', (c) => {
+  const url = new URL(c.req.url)
+  const baseUrl = `${url.protocol}//${url.host}`
+  
+  // SVG-based OG image (1200x630)
+  const ogImage = `<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style="stop-color:#1F2937;stop-opacity:1" />
+        <stop offset="50%" style="stop-color:#111827;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#1F2937;stop-opacity:1" />
+      </linearGradient>
+      <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#60A5FA;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#A78BFA;stop-opacity:1" />
+      </linearGradient>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="1200" height="630" fill="url(#bg-gradient)"/>
+    
+    <!-- Logo -->
+    <g transform="translate(600, 200) scale(0.5)">
+      <circle cx="-120" cy="120" r="30" fill="url(#text-gradient)"/>
+      <path d="M-120 -30 Q-120 90, 0 90 L0 30 Q-60 30, -60 -30 Z" fill="none" stroke="url(#text-gradient)" stroke-width="40"/>
+      <path d="M-120 -120 Q-120 180, 90 180 L90 120 Q30 120, 30 -120 Z" fill="none" stroke="url(#text-gradient)" stroke-width="40"/>
+      <circle cx="80" cy="-80" r="100" fill="none" stroke="url(#text-gradient)" stroke-width="15"/>
+      <line x1="80" y1="-80" x2="80" y2="-120" stroke="url(#text-gradient)" stroke-width="10" stroke-linecap="round"/>
+      <line x1="80" y1="-80" x2="110" y2="-50" stroke="url(#text-gradient)" stroke-width="10" stroke-linecap="round"/>
+    </g>
+    
+    <!-- Title -->
+    <text x="600" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="bold" text-anchor="middle" fill="url(#text-gradient)">LazyFeed</text>
+    
+    <!-- Tagline -->
+    <text x="600" y="450" font-family="system-ui, -apple-system, sans-serif" font-size="32" text-anchor="middle" fill="#D1D5DB">Smart RSS feed caching based on cron schedules</text>
+    
+    <!-- URL -->
+    <text x="600" y="550" font-family="system-ui, -apple-system, sans-serif" font-size="24" text-anchor="middle" fill="#9CA3AF">${baseUrl}</text>
+  </svg>`
+  
+  c.header('Content-Type', 'image/svg+xml')
+  c.header('Cache-Control', 'public, max-age=86400')
+  return c.body(ogImage)
 })
 
 export default app

@@ -76,7 +76,7 @@ app.get('/', (c) => {
                 
                 <div>
                     <label class="block text-sm font-medium mb-2">Cron Expression</label>
-                    <div class="flex gap-2">
+                    <div class="flex flex-col sm:flex-row gap-2">
                         <input 
                             type="text" 
                             id="cron" 
@@ -84,7 +84,7 @@ app.get('/', (c) => {
                             class="flex-1 px-4 py-2 bg-gray-700 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
                             value="0 * * * *"
                         >
-                        <select id="cronPreset" class="px-4 py-2 bg-gray-700 rounded-lg">
+                        <select id="cronPreset" class="px-4 py-2 bg-gray-700 rounded-lg cursor-pointer">
                             <option value="">Custom</option>
                             <option value="0 * * * *">Every hour</option>
                             <option value="0 */6 * * *">Every 6 hours</option>

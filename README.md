@@ -10,6 +10,11 @@ A smart RSS feed caching service built on Cloudflare Workers that fetches and ca
 - 🔄 **Smart refresh** - Only fetches new content when the schedule indicates it's time
 - 🛡️ **Fallback mechanism** - Returns cached content if fetch fails
 - ⚡ **Fast response times** - Serves cached content instantly when fresh
+- 🎨 **Beautiful UI** - Interactive landing page with URL generator
+
+## Quick Start
+
+Visit the landing page at your deployed URL to use the interactive RSS feed URL generator with preset cron expressions.
 
 ## API Usage
 
@@ -157,6 +162,22 @@ pnpm run deploy
    - If refresh needed: Fetches new content, caches it, returns it
    - If not: Returns cached content immediately
 6. **Error handling** - Falls back to cache on fetch failures
+
+### Landing Page
+
+The root path (`/`) serves an interactive landing page featuring:
+
+- **URL Generator**: Interactive form to create LazyFeed URLs
+- **Cron Presets**: Quick selection for common update schedules:
+  - Every hour (`0 * * * *`)
+  - Every 6 hours (`0 */6 * * *`)
+  - Daily at midnight (`0 0 * * *`)
+  - Daily at 10 AM (`0 10 * * *`)
+  - Daily at 10 PM (`0 22 * * *`)
+  - Twice daily at 10 AM & 10 PM (`0 10,22 * * *`)
+- **Copy to Clipboard**: One-click copying of generated URLs
+- **Dark Theme**: Modern gradient design with Tailwind CSS
+- **Feature Cards**: Visual representation of key features
 
 ### KV Storage Structure
 

@@ -18,6 +18,26 @@ app.get('/', (c) => {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LazyFeed - Smart RSS Caching Service</title>
+    <meta name="description" content="LazyFeed is a smart RSS feed caching service that fetches and caches RSS feeds based on cron schedules. Schedule updates, save bandwidth, and serve content faster.">
+    <meta name="keywords" content="RSS, feed, cache, cron, schedule, Cloudflare Workers, API">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://lazyfeed.polyfill.workers.dev/">
+    <meta property="og:title" content="LazyFeed - Smart RSS Caching Service">
+    <meta property="og:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
+    <meta property="og:image" content="https://lazyfeed.polyfill.workers.dev/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://lazyfeed.polyfill.workers.dev/">
+    <meta property="twitter:title" content="LazyFeed - Smart RSS Caching Service">
+    <meta property="twitter:description" content="Schedule RSS feed updates with cron expressions. Smart caching powered by Cloudflare Workers.">
+    <meta property="twitter:image" content="https://lazyfeed.polyfill.workers.dev/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mN8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>

@@ -33,6 +33,7 @@ export async function handleLazyFeedRequest(
 
   const now = new Date()
   let shouldFetch = false
+  let nextFetch: Date | null = null
 
   if (!stored.lastFetched) {
     shouldFetch = true
@@ -42,17 +43,37 @@ export async function handleLazyFeedRequest(
       currentDate: new Date(stored.lastFetched),
       tz: 'UTC'
     }).next().toDate()
+    nextFetch = next
     
     if (now >= next) {
       shouldFetch = true
     }
   }
 
+  // Prepare debug headers
+  const debugHeaders = new Headers({
+    'Content-Type': 'application/xml',
+    'x-cache-key': key,
+    'x-cron-expression': cron,
+    'x-feed-url': url,
+    'x-current-time': now.toISOString()
+  })
+
+  if (stored.lastFetched) {
+    debugHeaders.set('x-last-fetched', stored.lastFetched)
+    const cacheAge = Math.floor((now.getTime() - new Date(stored.lastFetched).getTime()) / 1000)
+    debugHeaders.set('x-cache-age-seconds', cacheAge.toString())
+  }
+
+  if (nextFetch) {
+    debugHeaders.set('x-next-fetch', nextFetch.toISOString())
+  }
+
   if (shouldFetch) {
     try {
       const res = await fetch(url)
       if (!res.ok) {
-        throw new Error('fetch failed')
+        throw new Error(`fetch failed with status ${res.status}`)
       }
       
       const xml = await res.text()
@@ -63,30 +84,49 @@ export async function handleLazyFeedRequest(
         cache: xml
       } as KVData))
       
+      debugHeaders.set('x-cache-status', 'miss')
+      debugHeaders.set('x-fetched-at', now.toISOString())
+      
       return new Response(xml, { 
         status: 200,
-        headers: { 'Content-Type': 'application/xml' }
+        headers: debugHeaders
       })
-    } catch {
+    } catch (error) {
       // Fallback to cache on fetch error
       if (stored.cache) {
+        debugHeaders.set('x-cache-status', 'stale')
+        debugHeaders.set('x-fetch-error', error instanceof Error ? error.message : 'unknown error')
+        
         return new Response(stored.cache, { 
           status: 200,
-          headers: { 'Content-Type': 'application/xml' }
+          headers: debugHeaders
         })
       }
       // First fetch failed with no cache
-      return new Response('failed to fetch RSS', { status: 502 })
+      debugHeaders.set('x-cache-status', 'error')
+      debugHeaders.set('x-fetch-error', error instanceof Error ? error.message : 'unknown error')
+      
+      return new Response('failed to fetch RSS', { 
+        status: 502,
+        headers: debugHeaders
+      })
     }
   } else {
     // Return cache
     if (stored.cache) {
+      debugHeaders.set('x-cache-status', 'hit')
+      
       return new Response(stored.cache, { 
         status: 200,
-        headers: { 'Content-Type': 'application/xml' }
+        headers: debugHeaders
       })
     }
     // Should not reach here in theory
-    return new Response('no cache available', { status: 404 })
+    debugHeaders.set('x-cache-status', 'error')
+    
+    return new Response('no cache available', { 
+      status: 404,
+      headers: debugHeaders
+    })
   }
 }

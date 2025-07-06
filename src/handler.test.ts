@@ -35,6 +35,9 @@ describe('handleLazyFeedRequest', () => {
   })
 
   it('should fetch RSS on first request', async () => {
+    const now = new Date('2025-01-01T10:00:00Z')
+    vi.setSystemTime(now)
+    
     const mockRSSContent = '<?xml version="1.0"?><rss><channel><title>Test</title></channel></rss>'
     
     // Mock fetch
@@ -51,6 +54,8 @@ describe('handleLazyFeedRequest', () => {
     
     expect(res.status).toBe(200)
     expect(res.headers.get('Content-Type')).toBe('application/xml')
+    expect(res.headers.get('x-cache-status')).toBe('miss')
+    expect(res.headers.get('x-fetched-at')).toBe(now.toISOString())
     expect(await res.text()).toBe(mockRSSContent)
     
     // Check KV put was called
@@ -83,6 +88,10 @@ describe('handleLazyFeedRequest', () => {
     
     expect(res.status).toBe(200)
     expect(res.headers.get('Content-Type')).toBe('application/xml')
+    expect(res.headers.get('x-cache-status')).toBe('hit')
+    expect(res.headers.get('x-last-fetched')).toBe(lastFetched)
+    expect(res.headers.get('x-cache-age-seconds')).toBe('1800')
+    expect(res.headers.get('x-next-fetch')).toBe('2025-01-01T11:00:00.000Z')
     expect(await res.text()).toBe(cachedContent)
     
     // Fetch should not be called
@@ -112,6 +121,8 @@ describe('handleLazyFeedRequest', () => {
     const res = await handleLazyFeedRequest(req, mockKV as any)
     
     expect(res.status).toBe(200)
+    expect(res.headers.get('x-cache-status')).toBe('miss')
+    expect(res.headers.get('x-fetched-at')).toBe(now.toISOString())
     expect(await res.text()).toBe(newContent)
     expect(mockKV.put).toHaveBeenCalled()
   })
@@ -135,6 +146,8 @@ describe('handleLazyFeedRequest', () => {
     const res = await handleLazyFeedRequest(req, mockKV as any)
     
     expect(res.status).toBe(200)
+    expect(res.headers.get('x-cache-status')).toBe('stale')
+    expect(res.headers.get('x-fetch-error')).toBe('Network error')
     expect(await res.text()).toBe(cachedContent)
   })
 
@@ -146,6 +159,8 @@ describe('handleLazyFeedRequest', () => {
     const res = await handleLazyFeedRequest(req, mockKV as any)
     
     expect(res.status).toBe(502)
+    expect(res.headers.get('x-cache-status')).toBe('error')
+    expect(res.headers.get('x-fetch-error')).toBe('Network error')
     expect(await res.text()).toBe('failed to fetch RSS')
   })
 })

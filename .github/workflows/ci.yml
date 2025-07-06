@@ -30,6 +30,12 @@ jobs:
         
       - name: Run tests
         run: pnpm run test
+        
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+        
+      - name: Run E2E tests
+        run: pnpm run test:e2e --project=chromium
 
   lint:
     runs-on: ubuntu-latest

@@ -7,6 +7,7 @@
 		"typecheck": "tsc --noEmit",
 		"test": "vitest",
 		"test:ui": "vitest --ui",
+		"test:e2e": "playwright test",
 		"lint": "tsc --noEmit"
 	},
 	"dependencies": {
@@ -15,9 +16,11 @@
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "^4.20250705.0",
+		"@playwright/test": "^1.53.2",
 		"@types/node": "^24.0.10",
 		"@vitest/ui": "^3.2.4",
 		"miniflare": "^4.20250617.5",
+		"playwright": "^1.53.2",
 		"typescript": "^5.8.3",
 		"vitest": "^3.2.4",
 		"vitest-environment-miniflare": "^2.14.4",

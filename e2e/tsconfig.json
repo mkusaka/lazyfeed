@@ -4,5 +4,6 @@
     "lib": ["ESNext", "DOM"],
     "types": ["@playwright/test"]
   },
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
 }

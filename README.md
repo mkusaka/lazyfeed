@@ -48,6 +48,7 @@ curl "https://your-worker.workers.dev/lazyfeed?url=https%3A%2F%2Fwww.nasa.gov%2F
 
 - **200 OK**: Returns the RSS XML content with `Content-Type: application/xml`
 - **400 Bad Request**: Missing parameters or invalid cron expression
+- **403 Forbidden**: Domain not allowed (when `ALLOWED_FEED_DOMAINS` is configured)
 - **502 Bad Gateway**: Failed to fetch RSS and no cache available
 
 ## Development
@@ -96,6 +97,53 @@ pnpm run test:ui
 
 ```bash
 pnpm run typecheck
+```
+
+## Configuration
+
+### Environment Variables
+
+LazyFeed supports the following environment variables:
+
+#### `ALLOWED_FEED_DOMAINS`
+
+Controls which domains are allowed for RSS feed URLs. This is useful for:
+- Security: Restrict RSS fetching to trusted domains only
+- Cost control: Prevent abuse by limiting which feeds can be cached
+- Corporate environments: Ensure only internal/approved feeds are accessed
+
+**Format**: Comma-separated list of domains
+
+**Values**:
+- `unlimited` (default): No restrictions, all domains allowed
+- `example.com,test.org`: Only exact domain matches allowed
+- `*.example.com`: Wildcard support for subdomains (includes base domain)
+- Empty string: No domains allowed (blocks all requests)
+
+**Examples**:
+
+```bash
+# Allow only specific domains
+ALLOWED_FEED_DOMAINS="nasa.gov,bbc.com,techcrunch.com"
+
+# Allow all subdomains of a domain
+ALLOWED_FEED_DOMAINS="*.company.com,*.trusted-partner.org"
+
+# Mix exact and wildcard domains
+ALLOWED_FEED_DOMAINS="exact.com,*.wildcard.com,another.org"
+
+# No restrictions (default)
+ALLOWED_FEED_DOMAINS="unlimited"
+```
+
+**Setting in wrangler.jsonc**:
+
+```jsonc
+{
+  "vars": {
+    "ALLOWED_FEED_DOMAINS": "*.mycompany.com,partner.com,news.trusted.org"
+  }
+}
 ```
 
 ## Deployment

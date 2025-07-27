@@ -5,9 +5,24 @@ export type KVData = {
   cache?: string
 }
 
+// Constant-time string comparison to prevent timing attacks
+function safeCompare(a: string, b: string): boolean {
+  const maxLength = Math.max(a.length, b.length)
+  let result = a.length ^ b.length
+  
+  for (let i = 0; i < maxLength; i++) {
+    const aChar = i < a.length ? a.charCodeAt(i) : 0
+    const bChar = i < b.length ? b.charCodeAt(i) : 0
+    result |= aChar ^ bChar
+  }
+  
+  return result === 0
+}
+
 export async function handleLazyFeedRequest(
   request: Request,
-  kv: KVNamespace
+  kv: KVNamespace,
+  allowedDomains?: string
 ): Promise<Response> {
   const { searchParams } = new URL(request.url)
   const url = searchParams.get('url')
@@ -22,6 +37,39 @@ export async function handleLazyFeedRequest(
     cronParser.parse(cron, { tz: 'UTC' })
   } catch {
     return new Response('invalid cron expression', { status: 400 })
+  }
+
+  // Validate allowed domains
+  if (allowedDomains !== undefined && allowedDomains !== 'unlimited') {
+    try {
+      const feedUrl = new URL(url)
+      const feedDomain = feedUrl.hostname.toLowerCase()
+      const allowedDomainList = allowedDomains
+        .split(',')
+        .map(d => d.trim().toLowerCase())
+        .filter(d => d.length > 0)
+
+      // If allowedDomains is empty string or results in empty list, block all domains
+      if (allowedDomainList.length === 0) {
+        return new Response(`Domain ${feedDomain} is not allowed`, { status: 403 })
+      }
+
+      // Check if the feed domain is in the allowed list
+      const isDomainAllowed = allowedDomainList.some(allowedDomain => {
+        // Support wildcards like *.example.com
+        if (allowedDomain.startsWith('*.')) {
+          const baseDomain = allowedDomain.slice(2)
+          return safeCompare(feedDomain, baseDomain) || feedDomain.endsWith('.' + baseDomain)
+        }
+        return safeCompare(feedDomain, allowedDomain)
+      })
+
+      if (!isDomainAllowed) {
+        return new Response(`Domain ${feedDomain} is not allowed`, { status: 403 })
+      }
+    } catch {
+      return new Response('Invalid URL format', { status: 400 })
+    }
   }
 
   const encodedUrl = encodeURIComponent(url)

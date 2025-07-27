@@ -163,4 +163,121 @@ describe('handleLazyFeedRequest', () => {
     expect(res.headers.get('x-fetch-error')).toBe('Network error')
     expect(await res.text()).toBe('failed to fetch RSS')
   })
+
+  describe('domain restrictions', () => {
+    it('should allow requests when ALLOWED_FEED_DOMAINS is unlimited', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, 'unlimited')
+      expect(res.status).toBe(200)
+    })
+
+    it('should allow requests when ALLOWED_FEED_DOMAINS is not set', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any)
+      expect(res.status).toBe(200)
+    })
+
+    it('should allow requests from allowed domains', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, 'example.com,test.com')
+      expect(res.status).toBe(200)
+    })
+
+    it('should block requests from non-allowed domains', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://blocked.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, 'example.com,test.com')
+      expect(res.status).toBe(403)
+      expect(await res.text()).toBe('Domain blocked.com is not allowed')
+    })
+
+    it('should support wildcard domains', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://sub.example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, '*.example.com')
+      expect(res.status).toBe(200)
+    })
+
+    it('should handle wildcard domains correctly for base domain', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, '*.example.com')
+      expect(res.status).toBe(200)
+    })
+
+    it('should handle multiple wildcard domains', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://blog.test.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, '*.example.com, *.test.com')
+      expect(res.status).toBe(200)
+    })
+
+    it('should handle malformed URLs gracefully', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=not-a-url&cron=0%20*%20*%20*%20*')
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, 'example.com')
+      expect(res.status).toBe(400)
+      expect(await res.text()).toBe('Invalid URL format')
+    })
+
+    it('should handle empty allowed domains list', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, '')
+      expect(res.status).toBe(403)
+      expect(await res.text()).toBe('Domain example.com is not allowed')
+    })
+
+    it('should handle spaces in allowed domains list', async () => {
+      const req = new Request('http://localhost/lazyfeed?url=https://example.com/feed.xml&cron=0%20*%20*%20*%20*')
+      
+      mockKV.get.mockResolvedValue(null)
+      global.fetch = vi.fn().mockResolvedValue({
+        ok: true,
+        text: async () => '<?xml version="1.0"?><rss></rss>',
+      })
+      
+      const res = await handleLazyFeedRequest(req, mockKV as any, ' example.com , test.com ')
+      expect(res.status).toBe(200)
+    })
+  })
 })

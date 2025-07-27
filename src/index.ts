@@ -3,12 +3,13 @@ import { handleLazyFeedRequest } from './handler'
 
 type Bindings = {
   LAZYFEED_KV: KVNamespace
+  ALLOWED_FEED_DOMAINS?: string
 }
 
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('/lazyfeed', async (c) => {
-  return handleLazyFeedRequest(c.req.raw, c.env.LAZYFEED_KV)
+  return handleLazyFeedRequest(c.req.raw, c.env.LAZYFEED_KV, c.env.ALLOWED_FEED_DOMAINS)
 })
 
 app.get('/', (c) => {

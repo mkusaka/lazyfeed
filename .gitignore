@@ -35,6 +35,3 @@ lerna-debug.log*
 # playwright
 test-results/
 playwright-report/
-
-# test config
-wrangler.test.jsonc

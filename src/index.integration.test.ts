@@ -8,6 +8,7 @@ describe('LazyFeed Worker Integration', () => {
   beforeAll(async () => {
     worker = await unstable_dev('./src/index.ts', {
       experimental: { disableExperimentalWarning: true },
+      config: './wrangler.test.jsonc',
     })
   })
 

@@ -1,0 +1,22 @@
+/**
+ * Test configuration for Wrangler
+ * This configuration is used for running integration tests
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "lazyfeed",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-07-05",
+	"observability": {
+		"enabled": true
+	},
+	"kv_namespaces": [
+		{
+			"binding": "LAZYFEED_KV",
+			"id": "24bf18a4a3fa4500be4a82e5e05c622d"
+		}
+	],
+	"vars": { 
+		"ALLOWED_FEED_DOMAINS": "unlimited"
+	}
+}

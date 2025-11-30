@@ -16,34 +16,34 @@ importers:
         version: 4.8.4
     devDependencies:
       '@cloudflare/workers-types':
-        specifier: ^4.20250705.0
+        specifier: 4.20250705.0
         version: 4.20250705.0
       '@playwright/test':
-        specifier: ^1.53.2
+        specifier: 1.53.2
         version: 1.53.2
       '@types/node':
         specifier: 24.0.10
         version: 24.0.10
       '@vitest/ui':
-        specifier: ^3.2.4
+        specifier: 3.2.4
         version: 3.2.4(vitest@3.2.4)
       miniflare:
-        specifier: ^4.20250617.5
+        specifier: 4.20250617.5
         version: 4.20250617.5
       playwright:
-        specifier: ^1.53.2
+        specifier: 1.53.2
         version: 1.53.2
       typescript:
-        specifier: ^5.8.3
+        specifier: 5.8.3
         version: 5.8.3
       vitest:
-        specifier: ^3.2.4
+        specifier: 3.2.4
         version: 3.2.4(@types/node@24.0.10)(@vitest/ui@3.2.4)
       vitest-environment-miniflare:
-        specifier: ^2.14.4
+        specifier: 2.14.4
         version: 2.14.4(vitest@3.2.4)
       wrangler:
-        specifier: ^4.23.0
+        specifier: 4.23.0
         version: 4.23.0(@cloudflare/workers-types@4.20250705.0)
 
 packages:

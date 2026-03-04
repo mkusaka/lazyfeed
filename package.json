@@ -17,9 +17,9 @@
 		"hono": "^4.8.4"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260228.0",
+		"@cloudflare/workers-types": "4.20260301.1",
 		"@playwright/test": "1.58.2",
-		"@types/node": "24.10.14",
+		"@types/node": "24.11.0",
 		"@vitest/ui": "4.0.18",
 		"miniflare": "4.20260305.0",
 		"playwright": "1.58.2",

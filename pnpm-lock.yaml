@@ -823,8 +823,8 @@ packages:
   fflate@0.8.2:
     resolution: {integrity: sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A==}
 
-  flatted@3.3.3:
-    resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
+  flatted@3.4.0:
+    resolution: {integrity: sha512-kC6Bb+ooptOIvWj5B63EQWkF0FEnNjV2ZNkLMLZRDDduIiWeFF4iKnslwhiWxjAdbg4NzTNo6h0qLuvFrcx+Sw==}
 
   fsevents@2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
@@ -950,8 +950,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  postcss@8.5.6:
-    resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
+  postcss@8.5.8:
+    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
     engines: {node: ^10 || ^12 || >=14}
 
   rollup@4.59.0:
@@ -1704,7 +1704,7 @@ snapshots:
     dependencies:
       '@vitest/utils': 4.0.18
       fflate: 0.8.2
-      flatted: 3.3.3
+      flatted: 3.4.0
       pathe: 2.0.3
       sirv: 3.0.2
       tinyglobby: 0.2.15
@@ -1803,7 +1803,7 @@ snapshots:
 
   fflate@0.8.2: {}
 
-  flatted@3.3.3: {}
+  flatted@3.4.0: {}
 
   fsevents@2.3.2:
     optional: true
@@ -1906,7 +1906,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.2
 
-  postcss@8.5.6:
+  postcss@8.5.8:
     dependencies:
       nanoid: 3.3.11
       picocolors: 1.1.1
@@ -2047,7 +2047,7 @@ snapshots:
       esbuild: 0.27.3
       fdir: 6.5.0(picomatch@4.0.3)
       picomatch: 4.0.3
-      postcss: 8.5.6
+      postcss: 8.5.8
       rollup: 4.59.0
       tinyglobby: 0.2.15
     optionalDependencies:

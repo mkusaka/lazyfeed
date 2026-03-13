@@ -10,7 +10,7 @@
       "groupName": "dependencies (non-major)",
       "matchManagers": ["npm"],
       "matchDepTypes": ["dependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
       "automerge": true,
       "automergeType": "pr",
       "minimumReleaseAge": "7 days"
@@ -20,7 +20,7 @@
       "matchManagers": ["npm"],
       "groupName": "devDependencies (non-major)",
       "matchDepTypes": ["devDependencies"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
       "automerge": true,
       "automergeType": "pr",
       "minimumReleaseAge": "7 days"

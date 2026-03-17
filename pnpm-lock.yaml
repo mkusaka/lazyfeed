@@ -13,7 +13,7 @@ importers:
         version: 5.5.0
       hono:
         specifier: ^4.8.4
-        version: 4.12.6
+        version: 4.12.7
     devDependencies:
       '@cloudflare/workers-types':
         specifier: 4.20260310.1
@@ -840,8 +840,8 @@ packages:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
 
-  hono@4.12.6:
-    resolution: {integrity: sha512-KljEp+MeEEEIOT75qBo1UjqqB29fRMtlDEwCxcexOzdkUq6LR/vRvHk5pdROcxyOYyW1niq7Gb5pFVGy5R1eBw==}
+  hono@4.12.7:
+    resolution: {integrity: sha512-jq9l1DM0zVIvsm3lv9Nw9nlJnMNPOcAtsbsgiUhWcFzPE99Gvo6yRTlszSLLYacMeQ6quHD6hMfId8crVHvexw==}
     engines: {node: '>=16.9.0'}
 
   html-rewriter-wasm@0.4.1:
@@ -1813,7 +1813,7 @@ snapshots:
 
   get-stream@6.0.1: {}
 
-  hono@4.12.6: {}
+  hono@4.12.7: {}
 
   html-rewriter-wasm@0.4.1: {}
 

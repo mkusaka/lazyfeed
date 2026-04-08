@@ -17,12 +17,12 @@
 		"hono": "^4.8.4"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260331.1",
-		"@playwright/test": "1.58.2",
+		"@cloudflare/workers-types": "4.20260401.1",
+		"@playwright/test": "1.59.0",
 		"@types/node": "24.12.0",
 		"@vitest/ui": "4.1.2",
 		"miniflare": "4.20260329.0",
-		"playwright": "1.58.2",
+		"playwright": "1.59.0",
 		"typescript": "5.9.3",
 		"vitest": "4.1.2",
 		"vitest-environment-miniflare": "2.14.4",

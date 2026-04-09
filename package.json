@@ -21,11 +21,11 @@
 		"@playwright/test": "1.59.1",
 		"@types/node": "24.12.0",
 		"@vitest/ui": "4.1.2",
-		"miniflare": "4.20260329.0",
+		"miniflare": "4.20260401.0",
 		"playwright": "1.59.1",
 		"typescript": "5.9.3",
 		"vitest": "4.1.2",
 		"vitest-environment-miniflare": "2.14.4",
-		"wrangler": "4.79.0"
+		"wrangler": "4.80.0"
 	}
 }

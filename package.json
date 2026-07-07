@@ -18,15 +18,15 @@
 		"hono": "^4.8.4"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "4.20260628.1",
+		"@cloudflare/workers-types": "4.20260630.1",
 		"@playwright/test": "1.61.1",
 		"@types/node": "24.13.2",
 		"@vitest/ui": "4.1.9",
-		"miniflare": "4.20260625.0",
+		"miniflare": "4.20260630.0",
 		"playwright": "1.61.1",
 		"typescript": "6.0.3",
 		"vitest": "4.1.9",
 		"vitest-environment-miniflare": "2.14.4",
-		"wrangler": "4.105.0"
+		"wrangler": "4.106.0"
 	}
 }

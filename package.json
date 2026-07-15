@@ -20,7 +20,7 @@
 	"devDependencies": {
 		"@cloudflare/workers-types": "4.20260702.1",
 		"@playwright/test": "1.61.1",
-		"@types/node": "24.13.2",
+		"@types/node": "24.13.3",
 		"@vitest/ui": "4.1.10",
 		"miniflare": "4.20260706.0",
 		"playwright": "1.61.1",

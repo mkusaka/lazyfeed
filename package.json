@@ -24,7 +24,7 @@
 		"@vitest/ui": "4.1.10",
 		"miniflare": "4.20260708.1",
 		"playwright": "1.61.1",
-		"typescript": "6.0.3",
+		"typescript": "7.0.2",
 		"vitest": "4.1.10",
 		"vitest-environment-miniflare": "2.14.4",
 		"wrangler": "4.110.0"

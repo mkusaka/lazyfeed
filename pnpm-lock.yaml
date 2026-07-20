@@ -10,10 +10,10 @@ importers:
     dependencies:
       cron-parser:
         specifier: ^5.3.0
-        version: 5.6.1
+        version: 5.6.2
       hono:
         specifier: ^4.8.4
-        version: 4.12.29
+        version: 4.12.30
     devDependencies:
       '@cloudflare/workers-types':
         specifier: 4.20260702.1
@@ -844,8 +844,8 @@ packages:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
 
-  cron-parser@5.6.1:
-    resolution: {integrity: sha512-QBm4o1PwZiuY7KFbVvW7FLC8bozy7YWzv+Fz6KRS7sQghzcbDZCGxr/Bc5b6TQreAoSwuWVP491dIcK0THCX6A==}
+  cron-parser@5.6.2:
+    resolution: {integrity: sha512-yJ/G1LVir6CnlkLI40CsampPLKl1SprGGlUagWtGJxewytRVYezv5xVyzzbT+Pvzx+VIRvZVF7/a0eEMTxdnTA==}
     engines: {node: '>=18'}
 
   cross-spawn@7.0.6:
@@ -911,8 +911,8 @@ packages:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
 
-  hono@4.12.29:
-    resolution: {integrity: sha512-1hNiRjawYrLq/4m3DQQjPGFg0VZkk4RjQJDff/excI6Dm9BiL75qxGrd7/c6YOxPdq6AscP3LiXhQ6fKFC1Waw==}
+  hono@4.12.30:
+    resolution: {integrity: sha512-emn+JoJjrN9YTpRDS5it/UI2SO9BAE37T6I3d963RxcZ81G9A4pr2SZTEiiaiKbzx+NKRg5BZ89fCL7gCJCUog==}
     engines: {node: '>=16.9.0'}
 
   html-rewriter-wasm@0.4.1:
@@ -1915,7 +1915,7 @@ snapshots:
 
   cookie@1.1.1: {}
 
-  cron-parser@5.6.1:
+  cron-parser@5.6.2:
     dependencies:
       luxon: 3.7.2
 
@@ -1996,7 +1996,7 @@ snapshots:
 
   get-stream@6.0.1: {}
 
-  hono@4.12.29: {}
+  hono@4.12.30: {}
 
   html-rewriter-wasm@0.4.1: {}
 

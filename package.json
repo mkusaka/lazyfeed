@@ -21,12 +21,12 @@
 		"@cloudflare/workers-types": "4.20260702.1",
 		"@playwright/test": "1.64.0",
 		"@types/node": "24.19.2",
-		"@vitest/ui": "5.0.3",
+		"@vitest/ui": "5.0.4",
 		"miniflare": "4.20260730.0",
 		"playwright": "1.64.0",
 		"typescript": "7.0.2",
-		"vitest": "5.0.3",
+		"vitest": "5.0.4",
 		"vitest-environment-miniflare": "2.14.4",
-		"wrangler": "4.149.0"
+		"wrangler": "4.150.0"
 	}
 }

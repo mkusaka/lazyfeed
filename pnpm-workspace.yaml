@@ -19,3 +19,5 @@ allowBuilds:
 minimumReleaseAgeExclude:
   # Renovate security update: hono@4.12.34
   - hono@4.12.34
+  # Renovate security update: @vitest/ui@5.0.5
+  - "@vitest/ui@5.0.5"

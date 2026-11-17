@@ -18,7 +18,7 @@
 		"hono": "^4.8.4"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "5.20261109.1",
+		"@cloudflare/workers-types": "5.20261110.1",
 		"@playwright/test": "1.65.0",
 		"@types/node": "26.6.6",
 		"@vitest/ui": "5.1.0",
@@ -27,6 +27,6 @@
 		"typescript": "7.0.2",
 		"vitest": "5.1.0",
 		"vitest-environment-miniflare": "2.14.4",
-		"wrangler": "4.158.0"
+		"wrangler": "4.160.0"
 	}
 }

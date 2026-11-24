@@ -1,6 +1,6 @@
 {
 	"name": "lazyfeed",
-	"packageManager": "pnpm@12.21.0",
+	"packageManager": "pnpm@12.22.0",
 	"scripts": {
 		"dev": "wrangler dev",
 		"deploy": "wrangler deploy --minify",
